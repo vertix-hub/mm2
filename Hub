@@ -8,7 +8,7 @@ task.spawn(function()
 end)
 
 -- === ШАГ 2: Halloween Loading Screen ===
-local loadTime = 90
+local loadTime = 60
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "HalloweenLoading"
